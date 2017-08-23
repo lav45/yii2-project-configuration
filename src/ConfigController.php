@@ -1,6 +1,6 @@
 <?php
 
-namespace lav45\config\console\controllers;
+namespace lav45\projectConfiguration\console\controllers;
 
 use yii\console\Controller;
 use yii\helpers\Console;
