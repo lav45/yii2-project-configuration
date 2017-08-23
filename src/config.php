@@ -14,7 +14,7 @@ if (!function_exists('config')) {
             $data = settings()->get(configKey(), []);
         }
 
-        return getenv($key) ?: array_key_exists($key, $data) ? $data[$key] : $default;
+        return getenv($key) ?: (array_key_exists($key, $data) ? $data[$key] : $default);
     }
 }
 
