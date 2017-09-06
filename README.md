@@ -14,7 +14,7 @@ The preferred way to install this extension through [composer](http://getcompose
 You can set the console
 
 ```
-~$ composer require "lav45/lav45/yii2-project-configuration" --prefer-dist
+~$ composer require "lav45/yii2-project-configuration" --prefer-dist
 ```
 
 or add
