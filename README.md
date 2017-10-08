@@ -7,6 +7,7 @@ yii2-project-configuration
 
 This extension helps you to easily store and retrieve settings for your project.
 
+
 ## Installation
 
 The preferred way to install this extension through [composer](http://getcomposer.org/download/).
@@ -64,22 +65,23 @@ return [
 ];
 ```
 
+
 ### Use console controller
 
 ```
 # Set value by key
-~$ php yii config/set db_name site-db
+~$ yii config db_name site-db
 
 # Display all keys
-~$ php yii config
+~$ yii config
 ~>    db_name: site-db
 
-# or Show value by key
-~$ php yii config/get db_name
+# Show value by key
+~$ yii config db_name
 ~> site-db
 
 # Delete key
-~$ php yii config/delete db_name
+~$ yii config/delete db_name
 ```
 
 
@@ -89,6 +91,7 @@ You can configure the component using [Yii::setAlias()](https://github.com/yiiso
 |:-----------------|:------------------------------|:-----------------------------------------------------|
 | @app_config_key  | 'app-config'                  | The key which will be stored settings                |
 | @app_config_path | '/storage'                    | Path where will be stored the file with the settings |
+
 
 ## License
 

@@ -12,12 +12,29 @@ use yii\helpers\Console;
 class ConfigController extends Controller
 {
     /**
+     * The universal method of access to methods `config/show`, `config/get`, `config/set`
+     *
+     * @param string|null $key
+     * @param string|null $value
+     */
+    public function actionIndex($key = null, $value = null)
+    {
+        if (isset($key, $value)) {
+            $this->actionSet($key, $value);
+        } elseif (isset($key)) {
+            $this->actionGet($key);
+        } else {
+            $this->actionShow();
+        }
+    }
+
+    /**
      * Display all keys
      *
      * ~$ php yii config
      * ~> db_name: site-db
      */
-    public function actionIndex()
+    public function actionShow()
     {
         foreach ($this->get() as $key => $value) {
             $this->stdout("  {$key}", Console::FG_YELLOW);
@@ -34,7 +51,7 @@ class ConfigController extends Controller
      *
      * ~$ php yii config/get db_name
      * ~> site-db
-     * 
+     *
      * @param string $key
      */
     public function actionGet($key)
@@ -47,9 +64,9 @@ class ConfigController extends Controller
 
     /**
      * Set value by key. Params: {key} {value}
-     * 
+     *
      * ~$ php yii config/set db_name site-db
-     * 
+     *
      * @param string $key
      * @param $value
      */
@@ -62,9 +79,9 @@ class ConfigController extends Controller
 
     /**
      * Delete key. Params: {key}
-     * 
+     *
      * ~$ php yii config/delete db_name
-     * 
+     *
      * @param string $key
      */
     public function actionDelete($key)
