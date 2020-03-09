@@ -13,8 +13,13 @@ if (!function_exists('config')) {
         if ($data === null) {
             $data = settings()->get(configKey(), []);
         }
-
-        return getenv($key) ?: (isset($data[$key]) || array_key_exists($key, $data) ? $data[$key] : $default);
+        if ($value = getenv($key)) {
+            return $value;
+        }
+        if (isset($data[$key]) || array_key_exists($key, $data)) {
+            return $data[$key];
+        }
+        return $default;
     }
 }
 
