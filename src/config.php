@@ -8,18 +8,10 @@ if (!function_exists('config')) {
      */
     function config($key, $default = null)
     {
-        static $data;
-
-        if ($data === null) {
-            $data = settings()->get(configKey(), []);
-        }
         if ($value = getenv($key)) {
             return $value;
         }
-        if (isset($data[$key]) || array_key_exists($key, $data)) {
-            return $data[$key];
-        }
-        return $default;
+        return settings()->get(".{$key}", $default);
     }
 }
 
@@ -35,7 +27,7 @@ if (!function_exists('configKey')) {
 
 if (!function_exists('settings')) {
     /**
-     * @return \lav45\settings\Settings
+     * @return \lav45\settings\Settings|\lav45\settings\behaviors\QuickAccessBehavior
      */
     function settings()
     {
@@ -46,12 +38,17 @@ if (!function_exists('settings')) {
         }
 
         $storagePath = Yii::getAlias('@app_config_path', false) ?: dirname(__DIR__) . '/storage';
-        
+
         $model = new lav45\settings\Settings([
             'serializer' => false,
+            'buildKey' => false,
+            'keyPrefix' => configKey(),
             'storage' => [
                 'class' => 'lav45\settings\storage\PhpFileStorage',
                 'path' => $storagePath
+            ],
+            'as access' => [
+                'class' => 'lav45\settings\behaviors\QuickAccessBehavior',
             ],
         ]);
 

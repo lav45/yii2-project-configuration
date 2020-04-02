@@ -12,7 +12,7 @@ use yii\helpers\Console;
 class ConfigController extends Controller
 {
     /**
-     * The universal method of access to methods `config/show`, `config/get`, `config/set`
+     * The universal method of access to methods `config/show`, `config/get`, `config/set`, `config/load`
      *
      * @param string|null $key
      * @param string|null $value
@@ -22,7 +22,11 @@ class ConfigController extends Controller
         if (isset($key, $value)) {
             $this->actionSet($key, $value);
         } elseif (isset($key)) {
-            $this->actionGet($key);
+            if (file_exists($key)) {
+                $this->actionLoad($key);
+            } else {
+                $this->actionGet($key);
+            }
         } else {
             $this->actionShow();
         }
@@ -36,12 +40,11 @@ class ConfigController extends Controller
      */
     public function actionShow()
     {
-        foreach ($this->get() as $key => $value) {
-            $this->stdout("  {$key}", Console::FG_YELLOW);
-            if (is_string($value)) {
-                $this->stdout(": {$value}", Console::FG_GREEN);
-            }
-            $this->stdout("\n");
+        $data = settings()->get(null);
+        foreach ($data as $key => $value) {
+            $this->stdout($key, Console::FG_YELLOW);
+            $value = $this->encodeValue($value);
+            $this->stdout(": {$value}\n", Console::FG_GREEN);
         }
         $this->stdout("\n");
     }
@@ -56,10 +59,26 @@ class ConfigController extends Controller
      */
     public function actionGet($key)
     {
-        $data = $this->get();
-        if (isset($data[$key])) {
-            echo $data[$key] . "\n";
+        $value = settings()->get(".{$key}");
+        if ($value) {
+            $value = $this->encodeValue($value);
+            $this->stdout("{$value}\n", Console::FG_GREEN);
         }
+    }
+
+    /**
+     * @param mixed $value
+     * @return string
+     */
+    private function encodeValue($value)
+    {
+        if (is_string($value)) {
+            return $value;
+        }
+        if (is_array($value)) {
+            return json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        }
+        return var_export($value, true);
     }
 
     /**
@@ -68,13 +87,11 @@ class ConfigController extends Controller
      * ~$ php yii config/set db_name site-db
      *
      * @param string $key
-     * @param $value
+     * @param string $value
      */
     public function actionSet($key, $value)
     {
-        $data = $this->get();
-        $data[$key] = $value;
-        $this->set($data);
+        settings()->replace(null, $key, $value);
     }
 
     /**
@@ -86,24 +103,22 @@ class ConfigController extends Controller
      */
     public function actionDelete($key)
     {
-        $data = $this->get();
+        $data = settings()->get(null);
         unset($data[$key]);
-        $this->set($data);
+        settings()->set(null, $data);
     }
 
     /**
-     * @return array
+     * Loading data from a file config.json
+     *
+     * ~$ php yii config/load ../config.json
+     *
+     * @param string $file - path to config file in json formate
      */
-    private function get()
+    public function actionLoad($file)
     {
-        return settings()->get(configKey(), []);
-    }
-
-    /**
-     * @param array $values
-     */
-    private function set($values)
-    {
-        settings()->set(configKey(), $values);
+        $data = file_get_contents($file);
+        $data = json_decode($data, true);
+        settings()->set(null, $data);
     }
 }
