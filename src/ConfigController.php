@@ -76,7 +76,7 @@ class ConfigController extends Controller
             return $value;
         }
         if (is_array($value)) {
-            return json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            return json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
         }
         return var_export($value, true);
     }
@@ -118,7 +118,7 @@ class ConfigController extends Controller
     public function actionLoad($file)
     {
         $data = file_get_contents($file);
-        $data = json_decode($data, true, JSON_THROW_ON_ERROR);
+        $data = json_decode($data, false, 512, JSON_THROW_ON_ERROR);
         settings()->set(null, $data);
     }
 }
