@@ -118,7 +118,7 @@ class ConfigController extends Controller
     public function actionLoad($file)
     {
         $data = file_get_contents($file);
-        $data = json_decode($data, false, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
         settings()->set(null, $data);
     }
 }
