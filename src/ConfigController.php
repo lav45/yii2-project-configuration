@@ -11,6 +11,18 @@ use yii\helpers\Console;
  */
 class ConfigController extends Controller
 {
+    /** @var bool */
+    public $force = false;
+
+    public function options($actionID)
+    {
+        $options = parent::options($actionID);
+        if ($actionID === 'load') {
+            $options[] = 'force';
+        }
+        return $options;
+    }
+
     /**
      * The universal method of access to methods `config/show`, `config/get`, `config/set`, `config/load`
      *
@@ -119,6 +131,10 @@ class ConfigController extends Controller
     {
         $data = file_get_contents($file);
         $data = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
+
+        if ($this->force === false) {
+            $data = array_merge_recursive(settings()->get(null), $data);
+        }
         settings()->set(null, $data);
     }
 }
