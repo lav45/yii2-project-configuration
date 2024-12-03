@@ -52,7 +52,7 @@ class ConfigController extends Controller
      */
     public function actionShow()
     {
-        $data = settings()->get(null);
+        $data = settings()->get(null, []);
         foreach ($data as $key => $value) {
             $this->stdout($key, Console::FG_YELLOW);
             $value = $this->encodeValue($value);
@@ -115,7 +115,7 @@ class ConfigController extends Controller
      */
     public function actionDelete($key)
     {
-        $data = settings()->get(null);
+        $data = settings()->get(null, []);
         unset($data[$key]);
         settings()->set(null, $data);
     }
@@ -133,7 +133,7 @@ class ConfigController extends Controller
         $data = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
 
         if ($this->force === false) {
-            $data = array_merge_recursive(settings()->get(null), $data);
+            $data = array_merge_recursive(settings()->get(null, []), $data);
         }
         settings()->set(null, $data);
     }
