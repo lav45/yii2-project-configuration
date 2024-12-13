@@ -3,6 +3,7 @@
 namespace lav45\projectConfiguration\console\controllers;
 
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Console;
 
 /**
@@ -133,7 +134,7 @@ class ConfigController extends Controller
         $data = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
 
         if ($this->force === false) {
-            $data = array_merge_recursive(settings()->get(null, []), $data);
+            $data = ArrayHelper::merge(settings()->get(null, []), $data);
         }
         settings()->set(null, $data);
     }

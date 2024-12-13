@@ -18,7 +18,7 @@
     "license": "BSD-3-Clause",
     "authors": [
         {
-            "name": "Alexey Loban",
+            "name": "Aleksey Loban",
             "email": "lav451@gmail.com"
         }
     ],
@@ -28,15 +28,24 @@
         "lav45/yii2-settings": ">=1.2.3"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-master"
+        "roave/security-advisories": "dev-latest"
     },
     "autoload": {
-        "files": [ "src/config.php" ],
-        "psr-4": { "lav45\\projectConfiguration\\console\\controllers\\": "src" }
+        "files": [
+            "src/config.php"
+        ],
+        "psr-4": {
+            "lav45\\projectConfiguration\\console\\controllers\\": "src"
+        }
     },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
         }
     }
 }

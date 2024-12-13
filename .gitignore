@@ -13,6 +13,8 @@ nbproject
 vendor
 
 # composer itself is not needed
+.composer
+composer
 composer.phar
 
 # Mac DS_Store Files
