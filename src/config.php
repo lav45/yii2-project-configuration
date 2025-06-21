@@ -8,7 +8,10 @@ if (!function_exists('config')) {
      */
     function config($key, $default = null)
     {
-        if ($value = getenv($key)) {
+        $envKey = strtoupper($key);
+        $envKey = str_replace('.', '_', $envKey);
+
+        if ($value = getenv($envKey)) {
             return $value;
         }
         return settings()->get(".{$key}", $default);
