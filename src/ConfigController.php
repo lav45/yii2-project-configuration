@@ -72,7 +72,7 @@ class ConfigController extends Controller
      */
     public function actionGet($key)
     {
-        $value = settings()->get(".{$key}");
+        $value = config($key);
         if ($value) {
             $value = $this->encodeValue($value);
             $this->stdout("{$value}\n", Console::FG_GREEN);
